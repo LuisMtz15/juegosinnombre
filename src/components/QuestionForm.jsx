@@ -56,7 +56,7 @@ export default function QuestionForm({
       </form>
 
       <p className="mt-4 text-center text-xs sm:text-sm text-[#343434]/70">
-        La letra puede ir en mayúscula o minúscula. Cada pregunta tiene hasta{" "}
+        Cada pregunta tiene hasta{" "}
         <span className="font-semibold text-[#FE6E16]">2 intentos</span> en el
         mismo turno.
       </p>

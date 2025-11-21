@@ -24,10 +24,6 @@ export default function WrongFinalScreen({
         {explanation}
       </p>
 
-      <p className="mt-4 text-xs sm:text-sm text-[#343434]/70">
-        Bueno, no pasa nada, para eso estamos aprendiendo ✨
-      </p>
-
       <div className="mt-6 flex justify-center">
         <button
           className="rounded-full bg-[#FE6E16] px-6 py-2.5 text-sm sm:text-base font-semibold text-white shadow-md shadow-[#FE6E16]/40 transition hover:-translate-y-0.5 hover:shadow-[#FE6E16]/60"

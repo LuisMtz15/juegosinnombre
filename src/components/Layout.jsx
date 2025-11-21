@@ -35,21 +35,27 @@ const desktopBlobs = [
 
   // ANILLO MEDIO
   { src: F5,  className: "top-1/4 -left-24 w-32 lg:w-40",        anim: 6.0 },
-  { src: F6,  className: "top-1/3 left-6 w-28 lg:w-36",          anim: 4.3 },
+  { src: F1,  className: "top-1/2 -left-15 w-28 lg:w-36",        anim: 4.3 },
   { src: F7,  className: "top-1/2 left-1/2 w-28 lg:w-36 -translate-x-1/2", anim: 5.2 },
-  { src: F8,  className: "top-1/3 right-6 w-28 lg:w-36",         anim: 6.4 },
+  { src: F8,  className: "top-1/2 -right-15 w-28 lg:w-36",       anim: 6.4 },
   { src: F5,  className: "top-1/4 -right-24 w-32 lg:w-40",       anim: 4.9 },
 
-// ANILLO INFERIOR (más abajo, más hacia afuera)
-{ src: F9,  className: "-bottom-10 left-6 w-32 lg:w-40",        anim: 5.1 },
-{ src: F10, className: "-bottom-14 left-1/3 w-32 lg:w-40",      anim: 5.7 },
-{ src: F7,  className: "-bottom-16 right-1/3 w-32 lg:w-40",     anim: 6.3 },
-{ src: F8,  className: "-bottom-10 right-6 w-32 lg:w-40",       anim: 4.5 },
+  // ANILLO INFERIOR — FIX SAFARI (más abajo)
+  { src: F9,  className: "-bottom-20 left-6 w-32 lg:w-40",        anim: 5.1 },
+  { src: F10, className: "-bottom-25 left-1/3 w-32 lg:w-40",      anim: 5.7 },
+  { src: F7,  className: "-bottom-25 right-1/3 w-32 lg:w-40",     anim: 6.3 },
+  { src: F8,  className: "-bottom-20 right-6 w-32 lg:w-40",       anim: 4.5 },
 ];
 
 export default function Layout({ children }) {
   return (
-    <div className="h-screen bg-[#FBF7F1] flex items-center justify-center px-4 py-3 sm:py-6 overflow-hidden relative font-fredoka">
+    <div
+      className="w-screen overflow-hidden relative font-fredoka flex items-center justify-center px-4 py-3 sm:py-6"
+      style={{
+        height: "100dvh",        // Fix Safari – altura real
+        backgroundColor: "#FBF7F1", // Evita bordes blancos
+      }}
+    >
       {/* BLOBS MOBILE */}
       {mobileBlobs.map((blob, index) => (
         <motion.img
