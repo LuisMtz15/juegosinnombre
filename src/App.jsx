@@ -8,7 +8,6 @@ import WrongFirstScreen from "./components/WrongFirstScreen";
 import WrongFinalScreen from "./components/WrongFinalScreen";
 import NotFoundScreen from "./components/NotFoundScreen";
 
-// 👇 librería de animaciones
 import { AnimatePresence, motion } from "framer-motion";
 
 function normalizeAnswer(value) {
@@ -81,7 +80,7 @@ function App() {
   };
 
   const tryAgainSameQuestion = () => {
-    // Segundo intento para la MISMA pregunta (otra persona)
+    // Segundo intento para la misma pregunta (otra persona)
     setAnswer("");
     setStatus("idle");
     // attempt se queda en 1 hasta que se vuelva a enviar
@@ -111,6 +110,7 @@ function App() {
               onChangeNumber={setQuestionNumber}
               onChangeAnswer={setAnswer}
               onSubmit={handleSubmit}
+              attempt={attempt}
             />
           </motion.div>
         )}
