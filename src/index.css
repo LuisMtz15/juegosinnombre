@@ -5,6 +5,13 @@
 }
 @import "tailwindcss";
 
+/* Evitar zoom en inputs en iOS */
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
 
 html, body {
   overflow: hidden !important;
