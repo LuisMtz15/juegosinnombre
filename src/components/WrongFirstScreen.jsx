@@ -31,7 +31,7 @@ export default function WrongFirstScreen({
           className="rounded-full bg-white px-5 py-2.5 text-sm sm:text-base font-semibold text-[#AB2C25] border border-[#AB2C25] shadow-sm hover:bg-[#AB2C25]/5"
           onClick={onSteal}
         >
-          Robar pregunta
+          Intentar de nuevo
         </button>
         <button
           className="rounded-full bg-[#FF924D] px-5 py-2.5 text-sm sm:text-base font-semibold text-white shadow-md shadow-[#FF924D]/40 hover:-translate-y-0.5 hover:shadow-[#FF924D]/60 transition"

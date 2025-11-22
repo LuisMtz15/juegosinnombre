@@ -10,18 +10,18 @@ export default function QuestionForm({
   attempt,
 }) {
   const num = Number(questionNumber);
-  const currentQuestion = QUESTIONS[num];
-  const options = currentQuestion?.options;
-
-  const handleChoiceClick = (letter) => {
-    onChangeAnswer(letter);
-  };
+  const currentQuestion = Number.isFinite(num) ? QUESTIONS[num] : null;
+  const options =
+    currentQuestion && currentQuestion.options ? currentQuestion.options : null;
 
   const handleNumberChange = (e) => {
     const value = e.target.value;
     onChangeNumber(value);
-    // 👇 cada vez que cambias de número de pregunta, limpiamos la respuesta
-    onChangeAnswer("");
+    onChangeAnswer(""); // limpiar respuesta al cambiar de pregunta
+  };
+
+  const handleChoiceClick = (letter) => {
+    onChangeAnswer(letter);
   };
 
   return (
@@ -33,7 +33,7 @@ export default function QuestionForm({
       </header>
 
       <form className="space-y-4 font-fredoka" onSubmit={onSubmit}>
-        {/* Número de pregunta */}
+        {/* NÚMERO DE PREGUNTA */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-[#343434]">
             Número de pregunta
@@ -42,7 +42,7 @@ export default function QuestionForm({
             type="number"
             min="1"
             max="80"
-            className="w-full rounded-full border border-[#343434]/10 bg-white px-4 py-2.5 text-sm sm:text-base shadow-sm outline-none transition focus:border-[#FE6E16] focus:ring-2 focus:ring-[#FE6E16]/20"
+            className="no-zoom-input w-full rounded-full border border-[#343434]/10 bg-white px-4 py-2.5 text-base sm:text-lg shadow-sm outline-none transition focus:border-[#FE6E16] focus:ring-2 focus:ring-[#FE6E16]/20 text-[#343434] placeholder:text-[#B0B0B0]"
             value={questionNumber}
             onChange={handleNumberChange}
             required
@@ -50,7 +50,7 @@ export default function QuestionForm({
           />
         </div>
 
-        {/* Campo de respuesta (texto) */}
+        {/* RESPUESTA COMO LETRA */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-[#343434]">
             Escribe tu respuesta (A, B, C, D…)
@@ -58,7 +58,7 @@ export default function QuestionForm({
           <input
             type="text"
             maxLength={1}
-            className="w-full rounded-full border border-[#343434]/10 bg-white px-4 py-2.5 text-sm sm:text-base shadow-sm outline-none transition focus:border-[#FE6E16] focus:ring-2 focus:ring-[#FE6E16]/20 uppercase"
+            className="no-zoom-input w-full rounded-full border border-[#343434]/10 bg-white px-4 py-2.5 text-base sm:text-lg shadow-sm outline-none transition focus:border-[#FE6E16] focus:ring-2 focus:ring-[#FE6E16]/20 uppercase text-[#343434] placeholder:text-[#B0B0B0]"
             value={answer}
             onChange={(e) => onChangeAnswer(e.target.value)}
             required
@@ -66,7 +66,7 @@ export default function QuestionForm({
           />
         </div>
 
-        {/* Opciones reales de la pregunta (A, B, C, D) */}
+        {/* OPCIONES A–D DE ESA PREGUNTA (SI EXISTEN) */}
         {options && (
           <div className="space-y-2">
             <p className="text-xs sm:text-sm text-[#343434]/80">
@@ -74,10 +74,11 @@ export default function QuestionForm({
             </p>
             <div className="mt-1 flex flex-col gap-2">
               {["a", "b", "c", "d"].map((letter) => {
-                const isSelected =
-                  (answer || "").toLowerCase() === letter.toLowerCase();
                 const text = options[letter];
                 if (!text) return null;
+
+                const isSelected =
+                  (answer || "").toLowerCase() === letter.toLowerCase();
 
                 return (
                   <button
@@ -101,7 +102,7 @@ export default function QuestionForm({
           </div>
         )}
 
-        {/* Botón enviar */}
+        {/* BOTÓN ENVIAR */}
         <button
           type="submit"
           className="mt-2 w-full rounded-full bg-[#7DB647] px-4 py-2.5 text-sm sm:text-base font-semibold text-white shadow-lg shadow-[#7DB647]/30 transition transform hover:-translate-y-0.5 hover:shadow-[#7DB647]/50 active:translate-y-0"
@@ -110,7 +111,7 @@ export default function QuestionForm({
         </button>
       </form>
 
-      {/* Mensaje de intentos */}
+      {/* TEXTO DE INTENTOS */}
       <p className="mt-4 text-center text-xs sm:text-sm text-[#343434]/70">
         Cada pregunta tiene hasta{" "}
         <span className="font-semibold text-[#FE6E16]">2 intentos</span> en el
