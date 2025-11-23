@@ -15,7 +15,7 @@ export default function WelcomeScreen({ onJoinAsPlayer, onCreateHost }) {
     <div className="font-fredoka">
       <header className="text-center mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-[#343434]">
-          ¡Bienvenid@ al juego!
+          ¡Bienvenid@ a 4 in Stake!
         </h1>
         <p className="mt-2 text-sm sm:text-base text-[#343434]/80">
           Usa un código para unirte o crea un grupo como host.
