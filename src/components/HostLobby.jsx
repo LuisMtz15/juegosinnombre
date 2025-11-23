@@ -4,7 +4,7 @@ export default function HostLobby({ code, connectedCount, onStartGame }) {
   return (
     <div className="font-fredoka text-center">
       <h2 className="text-2xl sm:text-3xl font-bold text-[#343434] mb-2">
-        Eres el host 🎮
+        Eres el host
       </h2>
       <p className="text-sm sm:text-base text-[#343434]/80 mb-4">
         Comparte este código con tu grupo:

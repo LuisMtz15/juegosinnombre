@@ -7,12 +7,14 @@ export default function PlayerGame({ code, phase, currentQuestionNumber }) {
   const [localAnswer, setLocalAnswer] = useState("");
   const [hasStealTurn, setHasStealTurn] = useState(false);
   const [didISendSteal, setDidISendSteal] = useState(false);
+  const [didIWinSteal, setDidIWinSteal] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
   const qNumber = Number(currentQuestionNumber || 0);
   const question = QUESTIONS[qNumber];
   const options = question?.options;
 
+  // Texto general según fase
   const phaseLabel = useMemo(() => {
     if (!qNumber) return "Esperando a que el host elija una pregunta…";
     if (phase === "playing") return "Pregunta en juego";
@@ -30,6 +32,7 @@ export default function PlayerGame({ code, phase, currentQuestionNumber }) {
       setLocalAnswer("");
       setHasStealTurn(false);
       setDidISendSteal(false);
+      setDidIWinSteal(false);
       setIsSending(false);
     }
   }, [phase, qNumber]);
@@ -38,6 +41,7 @@ export default function PlayerGame({ code, phase, currentQuestionNumber }) {
     setLocalAnswer(letter);
   };
 
+  // ---- Enviar respuesta de ROBO con control de "solo uno gana" ----
   const handleSendStealAnswer = async () => {
     if (!qNumber || !question) return;
 
@@ -48,26 +52,54 @@ export default function PlayerGame({ code, phase, currentQuestionNumber }) {
     }
 
     const correctLetter = String(question.correct || "").trim().toLowerCase();
+    const isCorrect = user === correctLetter;
 
     setIsSending(true);
-    try {
-      setDidISendSteal(true);
+    setDidISendSteal(true);
 
-      if (user === correctLetter) {
-        await supabase
+    try {
+      if (isCorrect) {
+        // Intentar ser el PRIMERO que cambia la fase a "resolved_steal_correct"
+        const { data, error } = await supabase
           .from("sessions")
           .update({ phase: "resolved_steal_correct" })
-          .eq("code", code);
+          .eq("code", code)
+          .eq("phase", "steal") // solo si sigue en modo robo
+          .select();
+
+        if (error) {
+          console.error("Error en update de robo correcto:", error);
+          setDidIWinSteal(false);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          // 🎉 Yo fui el primero → GANÉ el robo
+          setDidIWinSteal(true);
+        } else {
+          // Otro jugador ya había cambiado la fase antes que yo
+          setDidIWinSteal(false);
+        }
       } else {
-        await supabase
+        // Respuesta incorrecta
+        const { data, error } = await supabase
           .from("sessions")
           .update({ phase: "resolved_all_wrong" })
-          .eq("code", code);
+          .eq("code", code)
+          .eq("phase", "steal") // solo si aún estamos en robo
+          .select();
+
+        if (error) {
+          console.error("Error en update de robo incorrecto:", error);
+        }
+
+        // En cualquier caso, si fue incorrecta, no gané el robo
+        setDidIWinSteal(false);
       }
     } catch (err) {
       console.error("Error enviando respuesta de robo:", err);
-      alert("Hubo un problema al enviar tu respuesta. Intenta de nuevo.");
       setDidISendSteal(false);
+      setDidIWinSteal(false);
     } finally {
       setIsSending(false);
     }
@@ -81,7 +113,7 @@ export default function PlayerGame({ code, phase, currentQuestionNumber }) {
       phase === "resolved_steal_correct" ||
       phase === "resolved_all_wrong");
 
-  // Textos de pantallas finales
+  // ---- Textos de pantallas finales según quién ganó ----
   let finalTitle = "";
   let finalDescription = "";
 
@@ -90,11 +122,18 @@ export default function PlayerGame({ code, phase, currentQuestionNumber }) {
       finalTitle = "Respuesta correcta ✅";
       finalDescription = "El host respondió correctamente esta pregunta.";
     } else if (phase === "resolved_steal_correct") {
-      if (didISendSteal) {
+      if (didISendSteal && didIWinSteal) {
+        // Yo mandé la respuesta y fui el primero → gané el robo
         finalTitle = "¡Te robaste la pregunta! 🎉";
         finalDescription =
-          "Tu respuesta fue correcta y lograste robar la pregunta.";
+          "Tu respuesta fue correcta y fuiste el primero en enviarla.";
+      } else if (didISendSteal && !didIWinSteal) {
+        // Yo intenté robar, pero otro se me adelantó
+        finalTitle = "Otro jugador fue más rápido 😅";
+        finalDescription =
+          "Intentaste robar la pregunta, pero otro jugador la respondió antes.";
       } else {
+        // Yo nunca mandé respuesta de robo
         finalTitle = "¡Pregunta robada correctamente! 🙌";
         finalDescription =
           "Otro jugador respondió correctamente y se robó la pregunta.";
@@ -149,7 +188,7 @@ export default function PlayerGame({ code, phase, currentQuestionNumber }) {
         </p>
       )}
 
-      {/* Mensaje y botón para robar */}
+      {/* Mensaje + botón para iniciar robo */}
       {phase === "steal" && qNumber && !hasStealTurn && !didISendSteal && (
         <div className="mb-4">
           <p className="text-xs sm:text-sm text-[#343434]/80 mb-2">

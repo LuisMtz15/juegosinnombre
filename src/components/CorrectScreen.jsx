@@ -10,7 +10,7 @@ export default function CorrectScreen({
   resolvedBySteal = false,
 }) {
   const title = resolvedBySteal
-    ? "¡Te robaron la pregunta! 😮"
+    ? "¡Te robaron la pregunta!"
     : "¡Respuesta correcta! 🎉";
 
   const subtitle = resolvedBySteal

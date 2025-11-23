@@ -4,7 +4,7 @@ export default function PlayerLobby({ code }) {
   return (
     <div className="font-fredoka text-center">
       <h2 className="text-2xl sm:text-3xl font-bold text-[#343434] mb-2">
-        ¡Te uniste al juego! 🙌
+        ¡Te uniste al juego!
       </h2>
       <p className="text-sm sm:text-base text-[#343434]/80 mb-4">
         Espera a que el host inicie la partida.

@@ -9,8 +9,8 @@ export default function WrongFinalScreen({
   resolvedBySteal = false,
 }) {
   const title = resolvedBySteal
-    ? "El robo falló 😬"
-    : "Nadie acertó esta pregunta 😕";
+    ? "El robo falló"
+    : "Nadie acertó esta pregunta";
 
   const description = resolvedBySteal
     ? "El jugador que intentó robar la pregunta tampoco la acertó."
